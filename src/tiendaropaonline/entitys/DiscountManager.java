@@ -11,16 +11,8 @@ public class DiscountManager {
     private DiscountManager() {
     }
     //Atributos unicos de mi clase para concepto de pruebas en el main
-    private String descuentos = "30%";
     private List<String> listaArticulos = new ArrayList<>();
     // Getters & Setters
-    public String getDescuentos() {
-        return descuentos;
-    }
-
-    public void setDescuentos(String descuentos) {
-        this.descuentos = descuentos;
-    }
 
     public List<String> getListaArticulos() {
         return listaArticulos;
@@ -37,5 +29,19 @@ public class DiscountManager {
             instance = new DiscountManager();
         }
         return instance;
+    }
+    
+    public double applyDiscount(double price, String discountType) {
+        
+        switch (discountType) {
+            case "basico":
+                return price * 0.9; // 10% 
+            case "miembro":
+                return price * 0.80; // 20% 
+            case "vip":
+                return price * 0.70; // 30%
+            default:
+                return price; // Sin descuento
+        }
     }
 }

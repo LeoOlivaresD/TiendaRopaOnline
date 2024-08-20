@@ -3,11 +3,6 @@ package tiendaropaonline;
 import java.util.Scanner;
 import tiendaropaonline.entitys.DiscountManager;
 
-/*Que tal profesor Alberto, en esta ocacion realice lo propuesto por la pauta de manera sencilla
-llamando a la clase DiscountManager aca en el main, para evidenciar sus atributos y darle un poco mas de funcionamiento
-,ademas de su propia estructura como tal, siguiendo el patron singleton.
-De antemano muchas gracias por la revision y feedback.
-*/
 public class TiendaRopaOnline {
 
     static int opcionMenu;
@@ -16,6 +11,10 @@ public class TiendaRopaOnline {
     static boolean salirDoWhile = false;
 
     public static void main(String[] args) {
+         //Demostramos que tiene una instancia unica
+        DiscountManager anotherDiscountManager = DiscountManager.getInstance();
+        System.out.println("¿Es la misma instancia? " + (discountManager == anotherDiscountManager));
+        
         System.out.println("Bienvenido a ShopyOnline, tu tienda de ropas online");
         discountManager.getListaArticulos().add("Poleras");
         discountManager.getListaArticulos().add("Pantalones");
@@ -35,7 +34,7 @@ public class TiendaRopaOnline {
                 //DESCUENTOS
                 case 1:
                     System.out.println("Descuento disponible en cualquier compra por: ");
-                    System.out.println(discountManager.getDescuentos());
+                    verDescuentos();
                     break;
                 //VER ARTICULOS
                 case 2:
@@ -52,5 +51,15 @@ public class TiendaRopaOnline {
                     System.out.println("Opcion invalida, vuelva a intentarlo");
             }
         } while (!salirDoWhile);
+    }
+    
+    public static void verDescuentos(){
+    double precioBase = 100.0;
+        System.out.println("Precio original: $" + precioBase);
+        System.out.println("Precio con descuento normal: $" + discountManager.applyDiscount(precioBase, "basico"));
+        System.out.println("Precio con descuento VIP: $" + discountManager.applyDiscount(precioBase, "miembro"));
+        System.out.println("Precio con descuento especial: $" + discountManager.applyDiscount(precioBase, "vip"));
+        System.out.println("Precio sin descuento: $" + discountManager.applyDiscount(precioBase, "ninguno"));
+
     }
 }

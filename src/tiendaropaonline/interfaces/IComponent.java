@@ -1,5 +1,7 @@
 package tiendaropaonline.interfaces;
 
 public interface IComponent {
-    public void operation();
+    double getDiscount();
+    String getProd();
 }
+

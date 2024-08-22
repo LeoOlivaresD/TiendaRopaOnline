@@ -1,4 +1,4 @@
-package tiendaropaonline.entitys;
+package tiendaropaonline.entitys.comand;
 
 import tiendaropaonline.interfaces.IComand;
 

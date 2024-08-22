@@ -1,11 +1,10 @@
-package tiendaropaonline.entitys;
+package tiendaropaonline.entitys.comand;
 
 import java.util.ArrayList;
 import java.util.List;
 import tiendaropaonline.interfaces.IComand;
 
 public class Invoker {
-
     private List<IComand> comandos = new ArrayList<>();
 
     public void agregarComando(IComand comando) {
@@ -13,8 +12,8 @@ public class Invoker {
     }
 
     public void ejecutarComando() {
-        for (IComand comand : comandos) {
-            comand.ejecutar();
+        for (IComand comando : comandos) {
+            comando.ejecutar();
         }
     }
 }

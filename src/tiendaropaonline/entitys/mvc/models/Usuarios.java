@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package tiendaropaonline.entitys.mvc.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author ProBook
- */
+
 public class Usuarios {
    private Integer idUser;
    private String nombreUser;

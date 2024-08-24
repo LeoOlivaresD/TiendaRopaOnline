@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package tiendaropaonline.entitys.mvc.models;
 
-/**
- *
- * @author ProBook
- */
 public class Productos {
     private Integer idProd;
     private String nombreProd;
@@ -17,6 +9,12 @@ public class Productos {
     public Productos() {
     }
 
+    public Productos(Integer idProd, String nombreProd, double price) {
+        this.idProd = idProd;
+        this.nombreProd = nombreProd;
+        this.price = price;
+    }
+    
     public Productos(Integer idProd, String nombreProd, double price, Usuarios usuario) {
         this.idProd = idProd;
         this.nombreProd = nombreProd;
@@ -58,7 +56,7 @@ public class Productos {
 
     @Override
     public String toString() {
-        return "Productos{" + "idProd=" + idProd + ", nombreProd=" + nombreProd + ", price=" + price + ", usuario=" + usuario + '}';
+        return "Productos{" + "idProd=" + idProd + ", nombreProd=" + nombreProd + ", price=" + price + '}';
     }
     
     

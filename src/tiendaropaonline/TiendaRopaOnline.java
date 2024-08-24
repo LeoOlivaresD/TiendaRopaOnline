@@ -1,4 +1,7 @@
 
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import tiendaropaonline.entitys.comand.ApplyBasicDiscountCommand;
 import tiendaropaonline.entitys.comand.ApplyMemberDiscountCommand;
@@ -7,6 +10,12 @@ import tiendaropaonline.entitys.comand.Invoker;
 import tiendaropaonline.entitys.comand.Product;
 import tiendaropaonline.entitys.decorator.DiscountDecoratorA;
 import tiendaropaonline.entitys.decorator.DiscountDecoratorB;
+import tiendaropaonline.entitys.mvc.controllers.ProductoController;
+import tiendaropaonline.entitys.mvc.controllers.UsuarioController;
+import tiendaropaonline.entitys.mvc.models.Productos;
+import tiendaropaonline.entitys.mvc.models.Usuarios;
+import tiendaropaonline.entitys.mvc.views.VistaProductos;
+import tiendaropaonline.entitys.mvc.views.VistaUsuarios;
 import tiendaropaonline.interfaces.IComponent;
 
 public class TiendaRopaOnline {
@@ -15,8 +24,32 @@ public class TiendaRopaOnline {
     static Scanner sc = new Scanner(System.in);
     static DiscountManager discountManager = DiscountManager.getInstance();
     static boolean salirDoWhile = false;
+    //Instancias para MVC
+
+    //USUARIO
+    static Usuarios usuario = new Usuarios();
+    static VistaUsuarios vistaUsuarios = new VistaUsuarios();
+    static UsuarioController usuarioController = new UsuarioController(usuario, vistaUsuarios);
 
     public static void main(String[] args) {
+
+        //PRODUCTOS
+        VistaProductos vistaProductos = new VistaProductos();
+        Productos productos = new Productos();
+        ProductoController productoController = new ProductoController(productos, vistaProductos);
+
+        List<Productos> listaProductos = new ArrayList<>();
+        Productos producto1 = new Productos(1, "Polera Nike", 14000.0);
+        Productos producto2 = new Productos(1, "Polera Adidas", 12000.0);
+        Productos producto3 = new Productos(1, "Casaca", 60000.0);
+        Productos producto4 = new Productos(1, "Jeans Americanino", 25000.0);
+        listaProductos.add(producto1);
+        listaProductos.add(producto2);
+        listaProductos.add(producto3);
+        listaProductos.add(producto4);
+
+        productoController.guardarProductos(vistaProductos, listaProductos, productos);
+
         // Demostramos que tiene una instancia única
         DiscountManager anotherDiscountManager = DiscountManager.getInstance();
         System.out.println("¿Es la misma instancia? " + (discountManager == anotherDiscountManager));
@@ -38,17 +71,20 @@ public class TiendaRopaOnline {
         invoker.agregarComando(new ApplyMemberDiscountCommand(product));
         invoker.ejecutarComando();
 
-        menu();
+        menu(productoController, vistaProductos, listaProductos);
     }
 
-    public static void menu() {
+    public static void menu(ProductoController productoController, VistaProductos vistaProductos, List<Productos> listaProductos) {
         do {
             System.out.println("Elija alguna de las siguiente opciones escribiendo el número según corresponda:");
             System.out.println("1: Ver descuentos.\n"
                     + "2: Ver artículos.\n"
                     + "3: Aplicar descuentos usando Decorator.\n"
                     + "4: Aplicar descuentos usando Command.\n"
-                    + "5: Salir.");
+                    + "5: Registrar Usuario.\n"
+                    + "6: Mostrar Usuario actual.\n"
+                    + "7: Ir a carrito de compras.\n"
+                    + "8: Salir.");
             opcionMenu = sc.nextInt();
             switch (opcionMenu) {
                 // DESCUENTOS
@@ -58,9 +94,7 @@ public class TiendaRopaOnline {
                     break;
                 // VER ARTÍCULOS
                 case 2:
-                    for (String s : discountManager.getListaArticulos()) {
-                        System.out.println(s);
-                    }
+                    productoController.mostrarListaProds(vistaProductos, listaProductos);
                     break;
                 // APLICAR DESCUENTOS USANDO DECORATOR
                 case 3:
@@ -70,8 +104,36 @@ public class TiendaRopaOnline {
                 case 4:
                     aplicarDescuentosCommand();
                     break;
-                // SALIR
+                //REGISTRAR USUARIO
                 case 5:
+                    String nombreUsuario;
+                    int idUsuario;
+                    try {
+                        System.out.println("Registrando usuario...");
+                        System.out.println("Por favor ingrese un numero entero, el cual sera su identificador unico");
+                        idUsuario = sc.nextInt(); sc.nextLine();
+                        usuario.setIdUser(idUsuario);
+                    } catch (InputMismatchException exception) {
+                        System.out.println("Error !, por favor elige un numero valido e intentelo nuevamente"); 
+                        sc.next(); //limpio buffer
+                    }
+                    System.out.println("Id registrado con exito !");
+                    System.out.println("Ingrese el nombre de usuario a registrar");
+                    nombreUsuario = sc.nextLine();
+                    usuario.setNombreUser(nombreUsuario);
+                    vistaUsuarios.registrarUsuario(usuario);
+                    System.out.println("Usuario registrado con exito");
+                    break;
+                //MOSTRAR USUARIO ACTUAL
+                case 6:
+                    vistaUsuarios.mostrarUsuario(usuario);
+                    break;
+                //CARRITO COMPRAS
+                case 7:
+                    
+                    break;
+                // SALIR
+                case 8:
                     salirDoWhile = true;
                     System.out.println("Saliendo del programa, hasta luego ..");
                     break;

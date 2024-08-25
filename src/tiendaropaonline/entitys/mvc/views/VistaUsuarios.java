@@ -12,6 +12,6 @@ public class VistaUsuarios {
    public void mostrarUsuario(Usuarios usuario){
        System.out.println("Datos de usuario actual: \n"
                + "ID:" + usuario.getIdUser() + "\n"
-                       + "Nombre: " + usuario.getNombreUser() + "\n");
+                       + "Nombre: " + usuario.getNombreUser());
    } 
 }

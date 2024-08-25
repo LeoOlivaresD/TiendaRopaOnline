@@ -10,10 +10,13 @@ import tiendaropaonline.entitys.comand.Invoker;
 import tiendaropaonline.entitys.comand.Product;
 import tiendaropaonline.entitys.decorator.DiscountDecoratorA;
 import tiendaropaonline.entitys.decorator.DiscountDecoratorB;
+import tiendaropaonline.entitys.mvc.controllers.CarritoController;
 import tiendaropaonline.entitys.mvc.controllers.ProductoController;
 import tiendaropaonline.entitys.mvc.controllers.UsuarioController;
+import tiendaropaonline.entitys.mvc.models.CarritoCompra;
 import tiendaropaonline.entitys.mvc.models.Productos;
 import tiendaropaonline.entitys.mvc.models.Usuarios;
+import tiendaropaonline.entitys.mvc.views.VistaCarritoCompra;
 import tiendaropaonline.entitys.mvc.views.VistaProductos;
 import tiendaropaonline.entitys.mvc.views.VistaUsuarios;
 import tiendaropaonline.interfaces.IComponent;
@@ -31,6 +34,11 @@ public class TiendaRopaOnline {
     static VistaUsuarios vistaUsuarios = new VistaUsuarios();
     static UsuarioController usuarioController = new UsuarioController(usuario, vistaUsuarios);
 
+    //CARRITO DE COMPRAS
+    static CarritoCompra carritoCompra = new CarritoCompra();
+    static VistaCarritoCompra vistaCarritoCompra = new VistaCarritoCompra();
+    static CarritoController carritoControllerc = new CarritoController(vistaCarritoCompra, carritoCompra);
+
     public static void main(String[] args) {
 
         //PRODUCTOS
@@ -40,9 +48,9 @@ public class TiendaRopaOnline {
 
         List<Productos> listaProductos = new ArrayList<>();
         Productos producto1 = new Productos(1, "Polera Nike", 14000.0);
-        Productos producto2 = new Productos(1, "Polera Adidas", 12000.0);
-        Productos producto3 = new Productos(1, "Casaca", 60000.0);
-        Productos producto4 = new Productos(1, "Jeans Americanino", 25000.0);
+        Productos producto2 = new Productos(2, "Polera Adidas", 12000.0);
+        Productos producto3 = new Productos(3, "Casaca", 60000.0);
+        Productos producto4 = new Productos(4, "Jeans Americanino", 25000.0);
         listaProductos.add(producto1);
         listaProductos.add(producto2);
         listaProductos.add(producto3);
@@ -84,7 +92,8 @@ public class TiendaRopaOnline {
                     + "5: Registrar Usuario.\n"
                     + "6: Mostrar Usuario actual.\n"
                     + "7: Ir a carrito de compras.\n"
-                    + "8: Salir.");
+                    + "8: Eliminar producto de carrito.\n"
+                    + "9: Salir.");
             opcionMenu = sc.nextInt();
             switch (opcionMenu) {
                 // DESCUENTOS
@@ -95,6 +104,37 @@ public class TiendaRopaOnline {
                 // VER ARTÍCULOS
                 case 2:
                     productoController.mostrarListaProds(vistaProductos, listaProductos);
+                    System.out.println("Si deseas comprar algo porfavor registrate. \n"
+                            + "pulsa \"ENTER\" para continuar");
+                    sc.nextLine();
+                    sc.nextLine();
+                    if (usuario.getIdUser() != null) {
+                        System.out.println("Desea comprar algun producto ? (Responda \"1\" si su respuesta es si y 2 para \"no\")");
+                        int respuesta = sc.nextInt();
+                        switch (respuesta) {
+                            case 1:
+                                System.out.println("Ingrese el id del producto para agregar a carrito. (Numero entero que aparece en pantalla)");
+                                productoController.mostrarListaProds(vistaProductos, listaProductos);
+                                respuesta = sc.nextInt();
+                                boolean productoEncontrado = false;
+
+                                for (Productos prodBuscado : listaProductos) {
+                                    if (respuesta == prodBuscado.getIdProd()) {
+                                        usuario.getListaProductosAComprar().add(prodBuscado);
+                                        System.out.println("Producto agregado con éxito!");
+                                        productoEncontrado = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!productoEncontrado) {
+                                    System.out.println("Opción no válida");
+                                }
+                                break;
+                            default:
+                                System.out.println("Saliendo al menu principal");
+                        }
+                    }
                     break;
                 // APLICAR DESCUENTOS USANDO DECORATOR
                 case 3:
@@ -111,10 +151,11 @@ public class TiendaRopaOnline {
                     try {
                         System.out.println("Registrando usuario...");
                         System.out.println("Por favor ingrese un numero entero, el cual sera su identificador unico");
-                        idUsuario = sc.nextInt(); sc.nextLine();
+                        idUsuario = sc.nextInt();
+                        sc.nextLine();
                         usuario.setIdUser(idUsuario);
                     } catch (InputMismatchException exception) {
-                        System.out.println("Error !, por favor elige un numero valido e intentelo nuevamente"); 
+                        System.out.println("Error !, por favor elige un numero valido e intentelo nuevamente");
                         sc.next(); //limpio buffer
                     }
                     System.out.println("Id registrado con exito !");
@@ -128,12 +169,19 @@ public class TiendaRopaOnline {
                 case 6:
                     vistaUsuarios.mostrarUsuario(usuario);
                     break;
-                //CARRITO COMPRAS
+                //CARRITO DE COMPRAS
                 case 7:
-                    
+                    carritoControllerc.mostrarCarritoCompra(usuario, vistaCarritoCompra, carritoCompra);
+                    break;
+                //ELIMINAR PRODUCTO DE CARRITO  
+                case 8:
+                    carritoControllerc.mostrarCarritoCompra(usuario, vistaCarritoCompra, carritoCompra);
+                    System.out.println("Escribe el numero de id del producto que deseas eliminar");
+                    int idProd = sc.nextInt();
+                    carritoControllerc.eliminarProducto(usuario, vistaCarritoCompra, idProd);
                     break;
                 // SALIR
-                case 8:
+                case 9:
                     salirDoWhile = true;
                     System.out.println("Saliendo del programa, hasta luego ..");
                     break;

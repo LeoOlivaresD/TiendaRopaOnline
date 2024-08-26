@@ -60,24 +60,24 @@ public class TiendaRopaOnline {
 
         // Demostramos que tiene una instancia única
         DiscountManager anotherDiscountManager = DiscountManager.getInstance();
-        System.out.println("¿Es la misma instancia? " + (discountManager == anotherDiscountManager));
+        System.out.println("¿DiscountManager es la única instancia? " + (discountManager == anotherDiscountManager));
 
         System.out.println("Bienvenido a ShopyOnline, tu tienda de ropas online");
         discountManager.getListaArticulos().add("Poleras");
         discountManager.getListaArticulos().add("Pantalones");
         discountManager.getListaArticulos().add("Chaquetas");
         discountManager.getListaArticulos().add("Zapatos");
-
+        discountManager.getListaProds().addAll(listaProductos);
         // Uso del patrón Decorator
         IComponent product = new Product("Polera", 100.0);
         IComponent discountedProduct = new DiscountDecoratorA(product);
-        System.out.println("Producto: " + discountedProduct.getProd() + ", Precio con descuento: $" + discountedProduct.getDiscount());
+        //System.out.println("Producto: " + discountedProduct.getProd() + ", Precio con descuento: $" + discountedProduct.getDiscount());
 
         //Uso del patrón Command
         Invoker invoker = new Invoker();
         invoker.agregarComando(new ApplyBasicDiscountCommand(product));
         invoker.agregarComando(new ApplyMemberDiscountCommand(product));
-        invoker.ejecutarComando();
+        //invoker.ejecutarComando();
 
         menu(productoController, vistaProductos, listaProductos);
     }
